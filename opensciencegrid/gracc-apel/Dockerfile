@@ -4,7 +4,7 @@ FROM hub.opensciencegrid.org/opensciencegrid/software-base:$BASE_OSG_SERIES-el7-
 
 # install dependencies
 RUN yum -y install python3 python3-pip && \
-  pip3 install elasticsearch-dsl && \
+  pip3 install elasticsearch-dsl requests && \
   pip3 install argo-ams-library
 RUN yum -y install http://rpm-repo.argo.grnet.gr/ARGO/devel/centos7/python-argo-ams-library-0.5.5-20210415071520.ff0c536.el7.noarch.rpm
 
