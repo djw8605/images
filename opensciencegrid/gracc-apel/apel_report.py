@@ -19,8 +19,8 @@ from math import isclose
 #logging.basicConfig(level=logging.WARN)
 es = elasticsearch.Elasticsearch(
         ['https://gracc.opensciencegrid.org/q'],
-        timeout=300, use_ssl=True, verify_certs=True,
-        ca_certs='/etc/ssl/certs/ca-bundle.crt')
+        timeout=300, use_ssl=True, verify_certs=True)
+#        ca_certs='/etc/ssl/certs/ca-bundle.crt')
 
 osg_raw_index = 'gracc.osg.raw-*'
 osg_summary_index = 'gracc.osg.summary'
@@ -252,8 +252,10 @@ def print_rk_recr(year, month, rk, rec, output_file=sys.stdout):
 
         if submit_host == 0:
             portion = 1.0 - hs23_portion
+            metric_name = "hepspec"
         elif submit_host == 1:
             portion = hs23_portion
+            metric_name = "HEPscore23"
         else:
             raise ValueError(f"Invalid submit_host: {submit_host}")
         
@@ -270,8 +272,8 @@ def print_rk_recr(year, month, rk, rec, output_file=sys.stdout):
         write("NodeCount:",              fixed_nodecount)
         write("WallDuration:",           int(rec.walldur * portion))
         write("CpuDuration:",            int(rec.cpudur * portion))
-        write("NormalisedWallDuration:", int(rec.walldur * rec.nf * portion))
-        write("NormalisedCpuDuration:",  int(rec.cpudur  * rec.nf * portion))
+        write("NormalisedWallDuration:", "{" + metric_name + ": " + str(int(rec.walldur * rec.nf * portion)) + "}")
+        write("NormalisedCpuDuration:",  "{" + metric_name + ": " + str(int(rec.cpudur  * rec.nf * portion)) + "}")
         write("NumberOfJobs:",           int(rec.njobs * portion))
         write(fixed_separator)
 
